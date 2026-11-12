@@ -1,0 +1,120 @@
+﻿@using app_web_ventas.Dtos
+@using app_web_ventas.ViewModel
+@model IEnumerable<ProductListItemDto>
+
+@{
+    ViewData["Title"] = "Productos";
+    var f = (ProductFilterVm)ViewBag.Filters ?? new ProductFilterVm();
+    var categories = ViewBag.Categories as IEnumerable<SelectListItem>;
+    var suppliers = ViewBag.Suppliers as IEnumerable<SelectListItem>;
+}
+
+<h2 class="mb-3">Productos</h2>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+
+    <div class="col-12 col-md-3">
+        <label class="form-label">Categoría</label>
+        @if (categories != null)
+        {
+            <select name="CategoryId" class="form-select">
+                <option value="">-- Todas --</option>
+                @foreach (var c in categories)
+                {
+                    <option value="@c.Value" selected="@(c.Value == f.CategoryId?.ToString())">@c.Text</option>
+                }
+            </select>
+        }
+        else
+        {
+            <input name="CategoryId" value="@f.CategoryId" class="form-control" placeholder="CategoryId" />
+        }
+    </div>
+
+    <div class="col-12 col-md-3">
+        <label class="form-label">Proveedor</label>
+        @if (suppliers != null)
+        {
+            <select name="SupplierId" class="form-select">
+                <option value="">-- Todos --</option>
+                @foreach (var s in suppliers)
+                {
+                    <option value="@s.Value" selected="@(s.Value == f.SupplierId?.ToString())">@s.Text</option>
+                }
+            </select>
+        }
+        else
+        {
+            <input name="SupplierId" value="@f.SupplierId" class="form-control" placeholder="SupplierId" />
+        }
+    </div>
+
+    <div class="col-12 col-md-2">
+        <label class="form-label">Precio mín.</label>
+        <input name="MinPrice" value="@(f.MinPrice?.ToString())" class="form-control" />
+    </div>
+    <div class="col-12 col-md-2">
+        <label class="form-label">Precio máx.</label>
+        <input name="MaxPrice" value="@(f.MaxPrice?.ToString())" class="form-control" />
+    </div>
+
+    <div class="col-12 col-md-2">
+        <label class="form-label d-block">Estado stock</label>
+        <input type="hidden" name="OnlyAvailable" value="false" />
+        <div class="form-check">
+            <input id="chkAvail" class="form-check-input" type="checkbox" name="OnlyAvailable" value="true" @(f.OnlyAvailable ? "checked" : "") />
+            <label for="chkAvail" class="form-check-label">Solo con stock</label>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+        <label class="form-label">Discontinuado</label>
+        <select name="Discontinued" class="form-select">
+            <option value="" selected="@(f.Discontinued is null)">Todos</option>
+            <option value="false" selected="@(f.Discontinued == false)">Activos</option>
+            <option value="true" selected="@(f.Discontinued == true)">Discontinuados</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-2">
+        <button class="btn btn-primary w-100">Filtrar</button>
+    </div>
+    <div class="col-12 col-md-2">
+        <a class="btn btn-outline-secondary w-100" href="@Url.Action("Consultas", "Product")">Limpiar</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No se encontraron resultados.</div>
+}
+else
+{
+    <table class="table table-sm table-striped align-middle">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Proveedor</th>
+                <th class="text-end">Precio</th>
+                <th class="text-end">Stock</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.ProductId</td>
+                    <td>@p.ProductName</td>
+                    <td>@p.Category</td>
+                    <td>@p.Supplier</td>
+                    <td class="text-end">@p.UnitPrice.ToString("0.00")</td>
+                    <td class="text-end">@p.UnitsInStock</td>
+                    <td>@(p.Discontinued ? "Discontinuado" : "Activo")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

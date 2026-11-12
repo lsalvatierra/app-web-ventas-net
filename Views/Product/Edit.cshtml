@@ -1,0 +1,75 @@
+﻿@model app_web_ventas.Dtos.RegisterProductDto
+
+<div class="container mt-5">
+    <h1 class="text-center">Edit Product</h1>
+
+    <form asp-action="Edit" method="post" class="mt-4">
+        <input type="hidden" asp-for="productid" />
+
+        <div class="mb-3">
+            <label for="ProductName" class="form-label">Product Name</label>
+            <input type="text" asp-for="productname" class="form-control" id="ProductName" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="SupplierId" class="form-label">Supplier</label>
+            <select asp-for="supplierid" class="form-select" id="SupplierId" required>
+                <option value="">-- Select Supplier --</option>
+                @foreach (var supplier in ViewBag.Suppliers)
+                {
+                    <option value="@supplier.Supplierid">
+                        @supplier.Companyname
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="CategoryId" class="form-label">Category</label>
+            <select asp-for="categoryid" class="form-select" id="CategoryId" required>
+                <option value="">-- Select Category --</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Categoryid">
+                        @category.Categoryname
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="QuantityPerUnit" class="form-label">Quantity Per Unit</label>
+            <input type="text" asp-for="quantityperunit" class="form-control" id="QuantityPerUnit">
+        </div>
+
+        <div class="mb-3">
+            <label for="UnitPrice" class="form-label">Unit Price</label>
+            <input type="number" asp-for="unitprice" class="form-control" id="UnitPrice" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="UnitsInStock" class="form-label">Units In Stock</label>
+            <input type="number" asp-for="unitsinstock" class="form-control" id="UnitsInStock">
+        </div>
+
+        <div class="mb-3">
+            <label for="UnitsOnOrder" class="form-label">Units On Order</label>
+            <input type="number" asp-for="unitsonorder" class="form-control" id="UnitsOnOrder">
+        </div>
+
+        <div class="mb-3">
+            <label for="ReorderLevel" class="form-label">Reorder Level</label>
+            <input type="number" asp-for="reorderlevel" class="form-control" id="ReorderLevel">
+        </div>
+
+        <div class="mb-3">
+            <label for="Discontinued" class="form-label">Discontinued</label>
+            <select asp-for="discontinued" class="form-select" id="Discontinued">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
